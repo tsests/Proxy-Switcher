@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proxy Switcher</title>
+    <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+    <div class="popup-container">
+        <header class="popup-header">
+            <h2>Proxy Settings</h2>
+            <p id="current-domain" class="domain-display">Loading...</p>
+        </header>
+        
+        <main class="popup-main">
+            <div class="toggle-section">
+                <label class="toggle-label">
+                    <input type="checkbox" id="enable-proxy">
+                    <span class="toggle-slider"></span>
+                    <span class="toggle-text">Use proxy for this domain</span>
+                </label>
+            </div>
+            
+            <div id="proxy-form" class="proxy-form hidden">
+                <div class="form-group">
+                    <label for="popup-proxy-type">Proxy Type</label>
+                    <select id="popup-proxy-type">
+                        <option value="http">HTTP</option>
+                        <option value="socks">SOCKS5</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="popup-profile-select">Use Profile (optional)</label>
+                    <select id="popup-profile-select">
+                        <option value="">-- Select Profile --</option>
+                        <!-- Profiles will be added dynamically -->
+                    </select>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="popup-proxy-host">Host</label>
+                        <input type="text" id="popup-proxy-host" 
+                               placeholder="proxy.example.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="popup-proxy-port">Port</label>
+                        <input type="number" id="popup-proxy-port" 
+                               min="1" max="65535" 
+                               placeholder="8080">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="popup-proxy-username">Username</label>
+                        <input type="text" id="popup-proxy-username" 
+                               placeholder="username">
+                    </div>
+                    <div class="form-group">
+                        <label for="popup-proxy-password">Password</label>
+                        <div class="password-input">
+                            <input type="password" id="popup-proxy-password" 
+                                   placeholder="••••••••">
+                            <button type="button" class="toggle-password">
+                                👁
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-actions">
+                    <button id="apply-proxy" class="btn btn-primary">
+                        Apply & Reload
+                    </button>
+                    <button id="open-options" class="btn btn-secondary">
+                        Advanced Settings
+                    </button>
+                </div>
+            </div>
+            
+            <div id="no-proxy-info" class="info-message">
+                <p>No proxy configured for this domain.</p>
+                <p>Enable proxy to configure settings.</p>
+            </div>
+        </main>
+        
+        <footer class="popup-footer">
+            <p class="hint">Changes take effect after reload</p>
+        </footer>
+    </div>
+    
+    <script src="popup.js"></script>
+</body>
+</html>
