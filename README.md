@@ -95,5 +95,5 @@ Theme settings are stored locally in `browser.storage.local` under `uiThemeSetti
 
 ## Version
 
-Current version: 1.0.1
+Current version: 1.1.0
 
