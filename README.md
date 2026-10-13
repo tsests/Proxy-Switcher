@@ -99,7 +99,17 @@ If you encounter issues or have questions:
 2. Verify your proxy server settings are correct
 3. Ensure the proxy server is accessible from your network
 
+## Appearance themes
+
+The extension includes three built-in choices: System, Warm Paper, and Midnight Harbor, plus up to five named custom presets. The appearance selector is in the options page header; the popup remains focused on proxy controls.
+
+Open **Themes…** to create and edit presets. A preset can use one fixed Warm Paper or Midnight Harbor base, or a Light + Dark pair that automatically follows the operating system's `prefers-color-scheme` setting. Creating or editing a preset never switches the selected mode. If the preset being edited is already active, its own colors update immediately. Built-in themes are immutable, and custom color overrides are scoped only to the preset and variant where they were edited.
+
+Use **Export themes** or **Import themes** on the theme editor page to share custom color presets. The JSON file contains only theme presets; proxy domains, profiles, usernames, and passwords are not included. Imports are validated, limited to five presets total, and accept only known semantic color tokens and hexadecimal colors.
+
+Theme settings are stored locally in `browser.storage.local` under `uiThemeSettings` and are shared by the popup and options page. Older theme settings are migrated into the new format when they are read. Warm Paper uses a warm off-white background and muted blue accent. Midnight Harbor uses graphite surfaces with a blue accent reserved for primary actions and focus states.
+
 ## Version
 
-Current version: 1.0.0
+Current version: 1.1.0
 

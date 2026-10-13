@@ -11,12 +11,24 @@
     <div id="modal-overlay" class="modal-overlay hidden"></div>
 
     <div class="container">
-        <header>
-            <h1><img src="icons/64_64.png" alt="Proxy Switcher"> Proxy Switcher</h1>
-            <p class="subtitle">Manage domain-specific proxy settings</p>
+        <header class="options-header">
+            <div class="options-header-copy">
+                <h1><img src="icons/64_64.png" alt="Proxy Switcher"> Proxy Switcher</h1>
+                <p class="subtitle">Manage domain-specific proxy settings</p>
+            </div>
+            <div class="header-appearance">
+                <label class="visually-hidden" for="theme-mode">Appearance</label>
+                <select id="theme-mode" aria-label="Appearance" title="Appearance">
+                    <option value="system">System</option>
+                    <option value="light">Warm Paper</option>
+                    <option value="dark">Midnight Harbor</option>
+                </select>
+                <a id="open-theme-editor" href="theme-editor.html">Themes…</a>
+            </div>
         </header>
 
         <main>
+
             <section class="profiles-section">
                 <div class="section-header">
                     <h2>Proxy Profiles</h2>
@@ -226,11 +238,13 @@
 
         <footer>
             <div class="footer-content">
-                <p>Proxy Switcher v1.0.0</p>
+                <p>Proxy Switcher v1.1.0</p>
             </div>
         </footer>
     </div>
 
+    <script src="theme-manager.js"></script>
     <script src="options.js"></script>
+    <script src="theme-settings.js"></script>
 </body>
 </html>

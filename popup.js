@@ -7,24 +7,24 @@ class PopupManager {
     }
 
     async init() {
+        this.setupEventListeners();
+        // Profiles are independent from the current domain and must not delay initial UI readiness.
+        this.loadProfiles();
         await this.loadCurrentTab();
         await this.loadConfig();
-        await this.loadProfiles();
         this.setupUI();
-        this.setupEventListeners();
     }
 
     async loadCurrentTab() {
         try {
             const tabs = await browser.tabs.query({ active: true, currentWindow: true });
             this.currentTab = tabs[0];
-            
+
             if (this.currentTab.url) {
                 this.currentDomain = this.extractDomain(this.currentTab.url);
                 document.getElementById('current-domain').textContent = this.currentDomain;
             }
-        } catch (error) {
-            console.error('Failed to load current tab:', error);
+        } catch {
             document.getElementById('current-domain').textContent = 'Unknown domain';
         }
     }
@@ -42,13 +42,14 @@ class PopupManager {
         try {
             const response = await browser.runtime.sendMessage({ action: 'getConfig' });
             const config = response.config || { domains: {} };
-            this.currentConfig = config;
-
-            if (this.currentDomain && config.domains[this.currentDomain]) {
-                this.currentConfig = config.domains[this.currentDomain];
-            }
-        } catch (error) {
-            console.error('Failed to load config:', error);
+            // A global config object is not a domain config. Keep this null unless
+            // this exact domain has an explicit configuration, otherwise the toggle
+            // incorrectly appears enabled for unconfigured domains.
+            this.currentConfig = (this.currentDomain && config.domains &&
+                config.domains[this.currentDomain])
+                ? config.domains[this.currentDomain]
+                : null;
+        } catch {
             this.currentConfig = null;
         }
     }
@@ -58,8 +59,8 @@ class PopupManager {
             const response = await browser.runtime.sendMessage({ action: 'getProfiles' });
             const profiles = response.profiles || {};
             this.updateProfileSelect(profiles);
-        } catch (error) {
-            console.error('Failed to load profiles:', error);
+        } catch {
+            // Profile loading is optional; keep the popup available if it fails.
         }
     }
 
@@ -98,8 +99,8 @@ class PopupManager {
                     document.getElementById('popup-proxy-password').value = profile.password || '';
                 }
             })
-            .catch(error => {
-                console.error('Failed to load profile for form:', error);
+            .catch(() => {
+                // Leave the current form values unchanged if profile loading fails.
             });
     }
 
@@ -119,9 +120,9 @@ class PopupManager {
             // Populate form
             this.populateForm();
         } else {
-            // Proxy not configured
+            // Keep the established UX: the switch reveals the form for a new domain.
             enableCheckbox.checked = false;
-            enableCheckbox.disabled = true; // Disable checkbox if domain not configured
+            enableCheckbox.disabled = false;
             proxyForm.classList.add('hidden');
             noProxyInfo.classList.remove('hidden');
         }
@@ -173,10 +174,8 @@ class PopupManager {
                 domain: this.currentDomain,
                 domainConfig: domainConfig
             });
-
-            return response.success;
-        } catch (error) {
-            console.error('Failed to save config:', error);
+            return Boolean(response && response.success);
+        } catch {
             this.showError('Failed to save configuration');
             return false;
         }
@@ -191,10 +190,20 @@ class PopupManager {
             });
 
             return response.success;
-        } catch (error) {
-            console.error('Failed to remove config:', error);
+        } catch {
             return false;
         }
+    }
+
+    async handleProxyToggle(enabled) {
+        const noProxyInfo = document.getElementById('no-proxy-info');
+        if (!this.currentConfig) {
+            this.updateFormVisibility(enabled);
+            noProxyInfo.classList.toggle('hidden', enabled);
+            return;
+        }
+        this.updateFormVisibility(enabled);
+        await this.toggleProxy(enabled);
     }
 
     async toggleProxy(enabled) {
@@ -207,14 +216,13 @@ class PopupManager {
                 enabled: enabled
             });
 
-            if (!response.success) {
+            if (!response || !response.success) {
                 // If domain not configured, show message
                 this.showError('Domain not configured. Use "Apply & Reload" to configure proxy first.');
                 // Return checkbox to previous state
                 document.getElementById('enable-proxy').checked = !enabled;
             }
-        } catch (error) {
-            console.error('Failed to toggle proxy:', error);
+        } catch {
             this.showError('Failed to toggle proxy');
             // Return checkbox to previous state
             document.getElementById('enable-proxy').checked = !enabled;
@@ -223,7 +231,6 @@ class PopupManager {
 
     async applyAndReload() {
         const success = await this.saveConfig();
-
         if (success && this.currentTab) {
             // Reload tab
             await browser.tabs.reload(this.currentTab.id);
@@ -238,14 +245,7 @@ class PopupManager {
         const errorDiv = document.createElement('div');
         errorDiv.className = 'error-message';
         errorDiv.textContent = message;
-        errorDiv.style.cssText = `
-            background-color: #f8d7da;
-            color: #721c24;
-            padding: 10px;
-            margin: 10px 0;
-            border-radius: 4px;
-            border: 1px solid #f5c6cb;
-        `;
+        errorDiv.style.cssText = 'padding: 10px; margin: 10px 0; border-radius: 6px;';
 
         const main = document.querySelector('.popup-main');
         main.insertBefore(errorDiv, main.firstChild);
@@ -256,9 +256,7 @@ class PopupManager {
     setupEventListeners() {
         // Proxy toggle (quick enable/disable)
         document.getElementById('enable-proxy').addEventListener('change', async (e) => {
-            const enabled = e.target.checked;
-            this.updateFormVisibility(enabled); // Show/hide form
-            await this.toggleProxy(enabled);
+            await this.handleProxyToggle(e.target.checked);
         });
 
         // Apply settings
