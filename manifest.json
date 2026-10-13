@@ -38,7 +38,7 @@
   },
   "browser_specific_settings": {
     "gecko": {
-      "id": "proxy-switcher@1a2b3c4f5",
+      "id": "proxy-switcher@1a2b3c4f",
       "strict_min_version": "91.1.0",
       "data_collection_permissions": {
         "required": [

@@ -1,7 +1,8 @@
-.theme-editor-container { max-width: 1080px; }
+/* Keep the editor on the same page grid as the main settings screen. */
+.theme-editor-container { max-width: 1200px; }
 .theme-editor-header {
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     justify-content: space-between;
     gap: 20px;
 }
@@ -149,8 +150,10 @@
     .preset-edit-toolbar { align-items: stretch; flex-wrap: wrap; }
     .preset-name-field { flex-basis: 100%; }
 }
+@media (max-width: 640px) {
+    .theme-editor-header { flex-direction: column; align-items: flex-start; gap: 12px; }
+}
 @media (max-width: 520px) {
-    .theme-editor-header { flex-direction: column; gap: 8px; }
     .editor-section { padding: 14px; }
     .create-preset-form { grid-template-columns: 1fr; }
     .create-preset-form .form-group:first-child { grid-column: auto; }
