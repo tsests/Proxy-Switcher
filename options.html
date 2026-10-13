@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proxy Switcher - Options</title>
+    <link rel="stylesheet" href="options.css">
+</head>
+<body>
+    <!-- Modal Overlay -->
+    <div id="modal-overlay" class="modal-overlay hidden"></div>
+
+    <div class="container">
+        <header>
+            <h1><img src="icons/64_64.png" alt="Proxy Switcher"> Proxy Switcher</h1>
+            <p class="subtitle">Manage domain-specific proxy settings</p>
+        </header>
+
+        <main>
+            <section class="profiles-section">
+                <div class="section-header">
+                    <h2>Proxy Profiles</h2>
+                    <button id="add-profile" class="btn btn-primary">
+                        <span class="icon">+</span> Add Profile
+                    </button>
+                </div>
+
+                <div id="profiles-list" class="profiles-list">
+                    <!-- Dynamically populated -->
+                </div>
+            </section>
+
+            <section class="domains-section">
+                <div class="section-header">
+                    <h2>Configured Domains</h2>
+                    <button id="add-domain" class="btn btn-primary">
+                        <span class="icon">+</span> Add Domain
+                    </button>
+                </div>
+
+                <div class="search-controls">
+                    <div class="search-group">
+                        <input type="text" id="domain-search" placeholder="Search domains...">
+                        <select id="tag-filter">
+                            <option value="">All tags</option>
+                            <!-- Tags will be added dynamically -->
+                        </select>
+                    </div>
+                </div>
+
+                <div id="domains-list" class="domains-list">
+                    <!-- Dynamically populated -->
+                </div>
+            </section>
+
+            <section id="domain-form-section" class="domain-form-section hidden">
+                <h2 id="form-title">Add Domain</h2>
+                
+                <form id="domain-form" class="domain-form">
+                    <div class="form-group">
+                        <label for="domain-input">Domain *</label>
+                        <input type="text" id="domain-input" 
+                               placeholder="example.com" 
+                               pattern="^([a-zA-Z0-9]([a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}$"
+                               required>
+                        <small class="form-hint">Enter domain without protocol (e.g., example.com)</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="proxy-type">Proxy Type *</label>
+                        <select id="proxy-type" required>
+                            <option value="http">HTTP</option>
+                            <option value="socks">SOCKS5</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="profile-select">Use Profile (optional)</label>
+                        <select id="profile-select">
+                            <option value="">-- Select Profile --</option>
+                            <!-- Profiles will be added dynamically -->
+                        </select>
+                        <small class="form-hint">Selecting a profile will fill the fields below</small>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="proxy-host">Host *</label>
+                            <input type="text" id="proxy-host" 
+                                   placeholder="proxy.example.com" 
+                                   required>
+                        </div>
+                        <div class="form-group">
+                            <label for="proxy-port">Port *</label>
+                            <input type="number" id="proxy-port" 
+                                   min="1" max="65535" 
+                                   placeholder="8080" 
+                                   required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="proxy-username">Username (optional)</label>
+                            <input type="text" id="proxy-username" 
+                                   placeholder="username">
+                        </div>
+                        <div class="form-group">
+                            <label for="proxy-password">Password (optional)</label>
+                            <div class="password-input">
+                                <input type="password" id="proxy-password" 
+                                       placeholder="••••••••">
+                                <button type="button" class="toggle-password" 
+                                        data-target="proxy-password">
+                                    👁
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="domain-tags">Tags (optional)</label>
+                        <input type="text" id="domain-tags"
+                               placeholder="work, personal, blocked">
+                        <small class="form-hint">Comma-separated tags for organization</small>
+                    </div>
+
+                    <div class="form-group checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="proxy-enabled" checked>
+                            <span>Enable proxy for this domain</span>
+                        </label>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" id="cancel-form" class="btn btn-secondary">
+                            Cancel
+                        </button>
+                        <button type="submit" id="save-domain" class="btn btn-primary">
+                            Save Domain
+                        </button>
+                    </div>
+                </form>
+            </section>
+
+            <section id="profile-form-section" class="profile-form-section hidden">
+                <h2 id="profile-form-title">Add Profile</h2>
+
+                <form id="profile-form" class="profile-form">
+                    <div class="form-group">
+                        <label for="profile-name-input">Profile Name *</label>
+                        <input type="text" id="profile-name-input"
+                               placeholder="My Proxy Profile"
+                               required>
+                        <small class="form-hint">Enter a unique name for this profile</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="profile-proxy-type">Proxy Type *</label>
+                        <select id="profile-proxy-type" required>
+                            <option value="http">HTTP</option>
+                            <option value="socks">SOCKS5</option>
+                        </select>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="profile-proxy-host">Host *</label>
+                            <input type="text" id="profile-proxy-host"
+                                   placeholder="proxy.example.com"
+                                   required>
+                        </div>
+                        <div class="form-group">
+                            <label for="profile-proxy-port">Port *</label>
+                            <input type="number" id="profile-proxy-port"
+                                   min="1" max="65535"
+                                   placeholder="8080"
+                                   required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="profile-proxy-username">Username (optional)</label>
+                            <input type="text" id="profile-proxy-username"
+                                   placeholder="username">
+                        </div>
+                        <div class="form-group">
+                            <label for="profile-proxy-password">Password (optional)</label>
+                            <div class="password-input">
+                                <input type="password" id="profile-proxy-password"
+                                       placeholder="••••••••">
+                                <button type="button" class="toggle-password"
+                                        data-target="profile-proxy-password">
+                                    👁
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" id="cancel-profile-form" class="btn btn-secondary">
+                            Cancel
+                        </button>
+                        <button type="submit" id="save-profile" class="btn btn-primary">
+                            Save Profile
+                        </button>
+                    </div>
+                </form>
+            </section>
+            <section class="management-section">
+                <h2>Management</h2>
+                <div class="management-buttons">
+                    <button id="clear-domains" class="btn btn-danger">
+                        Clear All Domains
+                    </button>
+                    <button id="clear-profiles" class="btn btn-danger">
+                        Clear All Profiles
+                    </button>
+                    <button id="clear-all" class="btn btn-danger">
+                        Clear Everything
+                    </button>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <div class="footer-content">
+                <p>Proxy Switcher v1.0.0</p>
+            </div>
+        </footer>
+    </div>
+
+    <script src="options.js"></script>
+</body>
+</html>
