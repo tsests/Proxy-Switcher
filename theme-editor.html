@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proxy Switcher — Theme editor</title>
+    <link rel="stylesheet" href="options.css">
+    <link rel="stylesheet" href="theme-editor.css">
+</head>
+<body>
+    <div class="container theme-editor-container">
+        <header class="theme-editor-header">
+            <div>
+                <h1><img src="icons/64_64.png" alt="Proxy Switcher"> Theme editor</h1>
+                <p class="subtitle">Create up to five color presets. Editing never switches modes automatically; changes to the active preset apply immediately.</p>
+            </div>
+            <a href="options.html">Back to settings</a>
+        </header>
+
+        <main>
+            <section class="editor-section preset-creation">
+                <div class="section-heading">
+                    <div>
+                        <h2>Create a preset</h2>
+                        <p class="subtitle">Choose a fixed Warm Paper or Midnight Harbor base, or a paired preset that follows your system appearance.</p>
+                    </div>
+                    <span id="preset-count" class="preset-count">0 / 5</span>
+                </div>
+                <form id="create-preset-form" class="create-preset-form">
+                    <div class="form-group">
+                        <label for="new-preset-name">Preset name</label>
+                        <input id="new-preset-name" name="name" type="text" maxlength="48" placeholder="e.g. Ocean Glass" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="new-preset-type">Preset style</label>
+                        <select id="new-preset-type" name="type">
+                            <option value="single">Single theme</option>
+                            <option value="pair">Light + dark pair</option>
+                        </select>
+                    </div>
+                    <div id="new-preset-base-field" class="form-group">
+                        <label for="new-preset-base">Start from</label>
+                        <select id="new-preset-base" name="base">
+                            <option value="light">Warm Paper</option>
+                            <option value="dark">Midnight Harbor</option>
+                        </select>
+                    </div>
+                    <button id="create-preset" class="btn btn-primary" type="submit">Create preset</button>
+                </form>
+                <p id="editor-status" class="editor-status" role="status" aria-live="polite">Loading themes…</p>
+            </section>
+
+            <section class="editor-section">
+                <div class="section-heading">
+                    <div>
+                        <h2>Your presets</h2>
+                        <p class="subtitle">Select a preset to edit its colors. Built-in System, Warm Paper, and Midnight Harbor themes are always kept separate.</p>
+                    </div>
+                    <div class="theme-transfer-actions">
+                        <button id="export-themes" class="btn btn-secondary" type="button">Export themes</button>
+                        <button id="import-themes" class="btn btn-secondary" type="button">Import themes</button>
+                        <input id="import-themes-file" type="file" accept="application/json,.json" hidden>
+                    </div>
+                </div>
+                <div id="preset-list" class="preset-list"></div>
+                <p id="empty-presets" class="empty-presets">No custom presets yet. Create one above to get started.</p>
+            </section>
+
+            <section id="selected-preset-panel" class="editor-section selected-preset-panel" hidden>
+                <div class="section-heading selected-preset-heading">
+                    <div>
+                        <h2 id="selected-preset-title">Edit preset</h2>
+                        <p id="selected-preset-description" class="subtitle"></p>
+                    </div>
+                    <button id="activate-preset" class="btn btn-primary" type="button">Use this theme</button>
+                </div>
+                <div class="preset-edit-toolbar">
+                    <div class="form-group preset-name-field">
+                        <label for="preset-name">Preset name</label>
+                        <input id="preset-name" type="text" maxlength="48" autocomplete="off">
+                    </div>
+                    <button id="rename-preset" class="btn btn-secondary" type="button">Rename</button>
+                    <button id="delete-preset" class="btn btn-danger" type="button">Delete preset</button>
+                </div>
+                <div id="single-preset-base-row" class="single-preset-base-row form-group">
+                    <label for="editor-base-theme">Base palette</label>
+                    <select id="editor-base-theme">
+                        <option value="light">Warm Paper</option>
+                        <option value="dark">Midnight Harbor</option>
+                    </select>
+                </div>
+                <div id="variant-tabs" class="variant-tabs" role="group" aria-label="Color variant" hidden>
+                    <button class="btn btn-secondary is-selected" data-variant="light" type="button">Light variant</button>
+                    <button class="btn btn-secondary" data-variant="dark" type="button">Dark variant</button>
+                </div>
+                <div id="theme-preview" class="theme-preview" aria-label="Selected preset color preview">
+                    <div class="theme-preview-card">
+                        <div class="theme-preview-topline">
+                            <span class="theme-preview-mark">Proxy Switcher</span>
+                            <span class="theme-preview-tag">Preview</span>
+                        </div>
+                        <h3>Manage proxy settings</h3>
+                        <p class="theme-preview-copy">This sample updates as you edit the selected preset. It does not change the active app theme.</p>
+                        <div class="theme-preview-actions">
+                            <span class="theme-preview-primary">Primary action</span>
+                            <span class="theme-preview-secondary">Secondary action</span>
+                        </div>
+                        <div class="theme-preview-input">example.com</div>
+                        <div class="theme-preview-statuses">
+                            <span class="theme-preview-success">Connection enabled</span>
+                            <span class="theme-preview-danger">Connection error</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="color-section-heading">
+                    <div>
+                        <h3 id="color-editor-title">Theme colors</h3>
+                        <p class="subtitle">Only semantic colors are edited. The popup and settings page layout remain unchanged.</p>
+                    </div>
+                    <button id="reset-variant-colors" class="btn btn-secondary" type="button">Reset these colors</button>
+                </div>
+                <div id="color-controls" class="color-controls"></div>
+            </section>
+        </main>
+    </div>
+    <script src="theme-manager.js"></script>
+    <script src="theme-editor.js"></script>
+</body>
+</html>

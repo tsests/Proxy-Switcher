@@ -795,11 +795,11 @@ class OptionsManager {
         `;
         
         if (type === 'success') {
-            messageDiv.style.backgroundColor = '#28a745';
+            messageDiv.style.backgroundColor = 'var(--color-success)';
         } else if (type === 'error') {
-            messageDiv.style.backgroundColor = '#dc3545';
+            messageDiv.style.backgroundColor = 'var(--color-danger)';
         } else {
-            messageDiv.style.backgroundColor = '#17a2b8';
+            messageDiv.style.backgroundColor = 'var(--color-info)';
         }
         
         document.body.appendChild(messageDiv);

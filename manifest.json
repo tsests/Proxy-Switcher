@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "Proxy Switcher",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Selectively apply proxy servers to specific domains. All settings are stored locally and no data is collected or transmitted externally.",
   "icons": {
     "16": "icons/16_16.png",
@@ -38,13 +38,14 @@
   },
   "browser_specific_settings": {
     "gecko": {
-      "id": "proxy-switcher@1a2b3c4f",
+      "id": "proxy-switcher@1a2b3c4f5",
       "strict_min_version": "91.1.0",
       "data_collection_permissions": {
         "required": [
           "none"
         ]
       }
-    }
+    },
+    "gecko_android": {}
   }
 }
