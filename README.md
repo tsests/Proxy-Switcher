@@ -2,6 +2,22 @@
 
 A Firefox extension that allows selective application of proxy servers to specific domains, providing flexible proxy management for different websites.
 
+
+<p align="center">
+  <a href="https://addons.mozilla.org/ru/firefox/addon/set-proxy-switcher/">
+    <img
+      src="https://img.shields.io/badge/Get%20it%20for-Firefox-FF7139?logo=firefoxbrowser&logoColor=white"
+      alt="Get it for Firefox"
+    />
+  </a>
+  <a href="https://github.com/tsests/Proxy-Switcher">
+    <img
+      src="https://img.shields.io/badge/Source-GitHub-181717?logo=github&logoColor=white"
+      alt="Source code on GitHub"
+    />
+  </a>
+</p>
+
 ## Features
 
 - **Domain-specific proxy configuration**: Apply different proxy settings to different domains
